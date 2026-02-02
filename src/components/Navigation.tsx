@@ -35,6 +35,16 @@ export const Navigation = () => {
             >
               Tasks
             </Link>
+            <Link
+              to="/kanban"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                isActive('/kanban')
+                  ? 'bg-blue-600 text-white'
+                  : 'text-gray-700 hover:bg-gray-100'
+              }`}
+            >
+              Kanban
+            </Link>
           </div>
         </div>
       </div>

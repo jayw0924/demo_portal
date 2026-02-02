@@ -122,6 +122,32 @@ export const useLocalStorage = () => {
     });
   };
 
+  const exportData = () => {
+    const dataStr = JSON.stringify(demos, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `demo-tracker-backup-${new Date().toISOString()}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const importData = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const imported = JSON.parse(e.target?.result as string);
+        setDemos(imported);
+        alert('Data imported successfully!');
+      } catch (error) {
+        alert('Error importing data. Please check the file format.');
+        console.error('Import error:', error);
+      }
+    };
+    reader.readAsText(file);
+  };
+
   return {
     demos,
     addDemo,
@@ -133,5 +159,7 @@ export const useLocalStorage = () => {
     toggleCommentComplete,
     updateCommentPriority,
     updateCommentStatus,
+    exportData,
+    importData,
   };
 };
