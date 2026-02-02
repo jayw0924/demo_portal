@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import type { Demo } from '../types';
 import { DemoCard } from './DemoCard';
@@ -6,28 +6,12 @@ import { DemoCard } from './DemoCard';
 interface DemoListProps {
   demos: Demo[];
   onDelete: (id: string) => void;
-  onExport: () => void;
-  onImport: (file: File) => void;
 }
 
-export const DemoList = ({ demos, onDelete, onExport, onImport }: DemoListProps) => {
+export const DemoList = ({ demos, onDelete }: DemoListProps) => {
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'priority' | 'name' | 'createdAt'>('priority');
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleImportClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      onImport(file);
-      // Reset the input so the same file can be selected again
-      e.target.value = '';
-    }
-  };
 
   // Get unique categories and statuses
   const categories = useMemo(() => {
@@ -71,33 +55,12 @@ export const DemoList = ({ demos, onDelete, onExport, onImport }: DemoListProps)
       {/* Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-900">Demo Tracker</h1>
-        <div className="flex gap-2">
-          <button
-            onClick={onExport}
-            className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 font-medium"
-          >
-            Export Data
-          </button>
-          <button
-            onClick={handleImportClick}
-            className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 font-medium"
-          >
-            Import Data
-          </button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".json"
-            onChange={handleFileChange}
-            className="hidden"
-          />
-          <Link
-            to="/demo/new"
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
-          >
-            + Add New Demo
-          </Link>
-        </div>
+        <Link
+          to="/demo/new"
+          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
+        >
+          + Add New Demo
+        </Link>
       </div>
 
       {/* Filters and Sort */}

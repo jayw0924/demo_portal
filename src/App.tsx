@@ -21,8 +21,6 @@ function App() {
     toggleCommentComplete,
     updateCommentPriority,
     updateCommentStatus,
-    exportData,
-    importData,
   } = useSupabase();
 
   if (loading) {
@@ -71,8 +69,6 @@ function App() {
                 <DemoList
                   demos={demos}
                   onDelete={deleteDemo}
-                  onExport={exportData}
-                  onImport={importData}
                 />
               }
             />
