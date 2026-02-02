@@ -204,97 +204,116 @@ export const TasksView = ({
         </div>
       </div>
 
-      {/* Tasks List */}
-      <div className="space-y-3">
+      {/* Tasks Table */}
+      <div className="bg-white rounded-lg shadow-md overflow-hidden">
         {filteredTasks.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-md p-8 text-center text-gray-500">
+          <div className="p-8 text-center text-gray-500">
             No tasks match the selected filters
           </div>
         ) : (
-          filteredTasks.map((task) => (
-            <div
-              key={`${task.demoId}-${task.id}`}
-              className={`bg-white rounded-lg shadow-md p-4 transition-opacity ${
-                task.completed ? 'opacity-60' : ''
-              }`}
-            >
-              <div className="flex items-start gap-3">
-                <input
-                  type="checkbox"
-                  checked={task.completed}
-                  onChange={() => onToggleComplete(task.demoId, task.id)}
-                  className="mt-1 h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                />
-                <div className="flex-1">
-                  <div className="flex items-start gap-2 mb-2">
-                    <p
-                      className={`flex-1 text-gray-800 whitespace-pre-wrap ${
-                        task.completed ? 'line-through' : ''
-                      }`}
-                    >
-                      {task.text}
-                    </p>
-                  </div>
-
-                  <div className="flex flex-wrap items-center gap-2 mb-3">
-                    <span className={`px-2 py-1 rounded text-xs font-medium border ${getPriorityColor(task.priority)}`}>
-                      {task.priority}
-                    </span>
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(task.status)}`}>
-                      {task.status}
-                    </span>
-                  </div>
-
-                  <div className="flex gap-3 mb-3">
-                    <div className="flex-1">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
+                    Done
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Task
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Demo
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32">
+                    Priority
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-40">
+                    Status
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-40">
+                    Created
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-20">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {filteredTasks.map((task) => (
+                  <tr
+                    key={`${task.demoId}-${task.id}`}
+                    className={`hover:bg-gray-50 transition-colors ${
+                      task.completed ? 'bg-gray-50 opacity-60' : ''
+                    }`}
+                  >
+                    <td className="px-4 py-3">
+                      <input
+                        type="checkbox"
+                        checked={task.completed}
+                        onChange={() => onToggleComplete(task.demoId, task.id)}
+                        className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                      />
+                    </td>
+                    <td className="px-4 py-3">
+                      <p
+                        className={`text-sm text-gray-800 ${
+                          task.completed ? 'line-through' : ''
+                        }`}
+                      >
+                        {task.text}
+                      </p>
+                    </td>
+                    <td className="px-4 py-3">
+                      <Link
+                        to={`/demo/${task.demoId}`}
+                        className="text-sm text-blue-600 hover:text-blue-800 font-medium hover:underline"
+                      >
+                        {task.demoName}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3">
                       <select
                         value={task.priority}
                         onChange={(e) => onUpdatePriority(task.demoId, task.id, e.target.value as TaskPriority)}
-                        className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        className={`w-full px-2 py-1 text-xs font-medium border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${getPriorityColor(task.priority)}`}
                       >
                         <option value="Low">Low</option>
                         <option value="Mid">Mid</option>
                         <option value="High">High</option>
                       </select>
-                    </div>
-                    <div className="flex-1">
+                    </td>
+                    <td className="px-4 py-3">
                       <select
                         value={task.status}
                         onChange={(e) => onUpdateStatus(task.demoId, task.id, e.target.value as TaskStatus)}
-                        className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        className={`w-full px-2 py-1 text-xs font-medium rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${getStatusColor(task.status)}`}
                       >
                         <option value="Pending">Pending</option>
                         <option value="In Progress">In Progress</option>
                         <option value="Review">Review</option>
                         <option value="Approved">Approved</option>
                       </select>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3 text-xs text-gray-500">
-                    <Link
-                      to={`/demo/${task.demoId}`}
-                      className="text-blue-600 hover:text-blue-800 font-medium"
-                    >
-                      {task.demoName}
-                    </Link>
-                    <span>•</span>
-                    <span>{formatDate(task.createdAt)}</span>
-                  </div>
-                </div>
-                <button
-                  onClick={() => {
-                    if (window.confirm('Delete this task?')) {
-                      onDeleteComment(task.demoId, task.id);
-                    }
-                  }}
-                  className="text-sm text-red-600 hover:text-red-800"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))
+                    </td>
+                    <td className="px-4 py-3 text-xs text-gray-500">
+                      {formatDate(task.createdAt)}
+                    </td>
+                    <td className="px-4 py-3">
+                      <button
+                        onClick={() => {
+                          if (window.confirm('Delete this task?')) {
+                            onDeleteComment(task.demoId, task.id);
+                          }
+                        }}
+                        className="text-sm text-red-600 hover:text-red-800 font-medium"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
 
