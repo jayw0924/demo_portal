@@ -4,5 +4,6 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/demo_portal/',
+  // Removed base path for Netlify (serves from root)
+  // base: '/demo_portal/',
 })
